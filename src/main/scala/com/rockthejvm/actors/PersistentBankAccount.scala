@@ -21,12 +21,14 @@ class PersistentBankAccount {
   // events = to persist to Cassandra
   trait Event
   case class BankAccountCreated(bankAccount: BankAccount) extends Event
-  case class BalanceUpdated(newBalance: Double)
+  case class BalanceUpdated(amount: Double) extends Event
 
   // state
   case class BankAccount(id: String, user: String, currency: String, balance: Double)
 
   // response
   sealed trait Response
+  case class BankAccountCreatedResponse(id: String) extends Response
+  case class BankAccountBalanceUpdatedResponse(maybeBankAccount: Option[BankAccount])
 
 }
