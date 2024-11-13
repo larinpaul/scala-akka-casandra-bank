@@ -32,4 +32,15 @@ class PersistentBankAccount {
   case class BankAccountBalanceUpdatedResponse(maybeBankAccount: Option[BankAccount])
   case class GetBankAccountResponse(maybeBankAccount: Option[BankAccount]) extends Response
 
+  // Adding a persistent data actor:
+
+  // command handler = message handler => persist an event
+
+  // event handler => update state
+
+  // state
+
+
+
+
 }
