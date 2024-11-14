@@ -1,6 +1,8 @@
 package com.rockthejvm.actors
 
-import akka.actor.typed.ActorRef
+import akka.actor.typed.{ActorRef, Behavior}
+import akka.persistence.typed.PersistenceId
+import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 
 // a single bank account
 class PersistentBankAccount {
@@ -39,6 +41,17 @@ class PersistentBankAccount {
   // event handler => update state
 
   // state
+
+  val commandHandler: (BankAccount, Command) => Effect[Event, BankAccount] = ???
+  val eventHandler: (BankAccount, Event) => BankAccount = ???
+
+  def apply(id: String): Behavior[Command] =
+    EventSourcedBehavior[Command, Event, BankAccount](
+      persistenceId = PersistenceId.ofUniqueId(id),
+      emptyState = BankAccount(id, "", "", 0.0), // unused
+      commandHandler = commandHandler,
+      eventHandler = eventHandler
+    )
 
 
 
