@@ -52,9 +52,19 @@ class PersistentBankAccount {
           - reply back with the BankAccountCreatedResponse
           - (the bank surfaces the response to the HTTP server)
         */
-      Effect
-        .persist(BankAccountCreated(BankAccount(id, user, currency, initialBalance))) // persisted into Cassandra
-        .thenReply(replyTo)(_ => BankAccountCreatedResponse(id))
+        Effect
+          .persist(BankAccountCreated(BankAccount(id, user, currency, initialBalance))) // persisted into Cassandra
+          .thenReply(replyTo)(_ => BankAccountCreatedResponse(id))
+      case UpdateBalance(_, _, amount, replyTo) =>
+        val newBalance = state.balance + amount
+        // check here for withdrawal
+        if (newBalance < 0) // illegal
+          Effect.reply(replyTo)(BankAccountBalanceUpdatedResponse(None))
+        else
+          Effect
+            .persist(BalanceUpdated(amount))
+            .thenReply(replyTo)(newState => BankAccountBalanceUpdatedResponse(Some(newState)))
+
     }
   val eventHandler: (BankAccount, Event) => BankAccount = ???
 
