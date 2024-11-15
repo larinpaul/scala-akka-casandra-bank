@@ -37,12 +37,25 @@ class PersistentBankAccount {
   // Adding a persistent data actor:
 
   // command handler = message handler => persist an event
-
   // event handler => update state
-
   // state
 
-  val commandHandler: (BankAccount, Command) => Effect[Event, BankAccount] = ???
+  val commandHandler: (BankAccount, Command) => Effect[Event, BankAccount] = (state, command) =>
+    command match {
+      case CreateBankAccount(user, currency, initialBalance, replyTo) =>
+        val id = state.id
+        /*
+          - bank creates me
+          - bank sends me CreateBankAccount
+          - I persist BankAccountCreated
+          - I update my state
+          - reply back with the BankAccountCreatedResponse
+          - (the bank surfaces the response to the HTTP server)
+        */
+      Effect
+        .persist(BankAccountCreated(BankAccount(id, user, currency, initialBalance))) // persisted into Cassandra
+        .thenReply(replyTo)(_ => BankAccountCreatedResponse(id))
+    }
   val eventHandler: (BankAccount, Event) => BankAccount = ???
 
   def apply(id: String): Behavior[Command] =
