@@ -1,4 +1,4 @@
-package com.rockthejvm.actors
+package com.rockthejvm.bank.actors
 
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
