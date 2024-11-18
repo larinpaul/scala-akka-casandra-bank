@@ -1,6 +1,6 @@
 package com.rockthejvm.bank.actors
 
-import akka.actor.typed.ActorRef
+import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.scaladsl.Effect
 
 class Bank {
@@ -23,6 +23,6 @@ class Bank {
   val eventHandler: (State, Event) => State => ???
 
   // behavior
-
+  def apply(): Behavior[Command] = ???
 
 }
