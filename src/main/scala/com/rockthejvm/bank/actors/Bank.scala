@@ -20,7 +20,9 @@ class Bank {
   val commandHandler: (State, Command) => Effect[Event, State] = ???
 
   // event handler
+  val eventHandler: (State, Event) => State => ???
 
   // behavior
+
 
 }
