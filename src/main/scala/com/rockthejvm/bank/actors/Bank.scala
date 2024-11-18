@@ -1,6 +1,7 @@
 package com.rockthejvm.bank.actors
 
 import akka.actor.typed.ActorRef
+import akka.persistence.typed.scaladsl.Effect
 
 class Bank {
 
@@ -14,5 +15,12 @@ class Bank {
 
   // state
   case class State(accounts: Map[String, ActorRef[Command]])
+
+  // command handler aka message handler
+  val commandHandler: (State, Command) => Effect[Event, State] = ???
+
+  // event handler
+
+  // behavior
 
 }
