@@ -32,8 +32,7 @@ class Bank {
     }
 
   // behavior
-  def apply(): Behavior[Command] = Behaviors.setup {
-
+  def apply(): Behavior[Command] = Behaviors.setup { context =>
     EventSourceBehavior[Command, Event, State](
       persistenceId = PersistenceId.ofUniqueId("bank"),
       emptyState = State(Map()),
