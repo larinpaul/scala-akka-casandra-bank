@@ -4,7 +4,9 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.Effect
-import com.rockthejvm.bank.actors.PersistentBankAccount.eventHandler
+import com.rockthejvm.bank.actors.PersistentBankAccount.{BankAccount, eventHandler}
+
+import java.util.UUID
 
 class Bank {
 
@@ -22,7 +24,12 @@ class Bank {
   case class State(accounts: Map[String, ActorRef[Command]])
 
   // command handler aka message handler                // run my little function here...
-  val commandHandler: (State, Command) => Effect[Event, State] = ???
+  val commandHandler: (State, Command) => Effect[Event, State] = (state, command) =>
+    command match {
+      case CreateBankAccount(user, currency, initialBalance, replyTo) =>
+        val id = UUID.randomUUID().toString
+        val new BankAccount = context.spawn
+    }
 
   // behavior
   def apply(): Behavior[Command] = Behaviors.setup {
