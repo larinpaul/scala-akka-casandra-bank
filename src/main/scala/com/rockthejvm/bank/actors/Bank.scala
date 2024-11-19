@@ -40,4 +40,5 @@ class Bank {
       eventHandler = eventHandler
     )
   }
+
 }
