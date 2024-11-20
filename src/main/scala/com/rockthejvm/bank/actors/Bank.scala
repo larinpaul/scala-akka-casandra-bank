@@ -28,8 +28,11 @@ class Bank {
     command match {
       case CreateBankAccount(user, currency, initialBalance, replyTo) =>
         val id = UUID.randomUUID().toString
-        val new BankAccount = context.spawn
+        val newBankAccount = context.spawn
     }
+
+  // event handler
+  val eventHandler: (State, Event) => State = ???
 
   // behavior
   def apply(): Behavior[Command] = Behaviors.setup { context =>
