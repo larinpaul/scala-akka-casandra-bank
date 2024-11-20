@@ -1,5 +1,6 @@
 package com.rockthejvm.bank.actors
 
+import akka.actor.AbstractActor.ActorContext
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
@@ -24,11 +25,11 @@ class Bank {
   case class State(accounts: Map[String, ActorRef[Command]])
 
   // command handler aka message handler                // run my little function here...
-  val commandHandler: (State, Command) => Effect[Event, State] = (state, command) =>
+  def commandHandler(context: ActorContext[Command]): (State, Command) => Effect[Event, State] = (state, command) =>
     command match {
       case CreateBankAccount(user, currency, initialBalance, replyTo) =>
         val id = UUID.randomUUID().toString
-        val newBankAccount = context.spawn
+        val newBankAccount = context.spawn(PersistentBankAccount(id), id)
     }
 
   // event handler
@@ -39,7 +40,7 @@ class Bank {
     EventSourceBehavior[Command, Event, State](
       persistenceId = PersistenceId.ofUniqueId("bank"),
       emptyState = State(Map()),
-      commandHandler = commandHandler,
+      commandHandler = commandHandler(context),
       eventHandler = eventHandler
     )
   }
