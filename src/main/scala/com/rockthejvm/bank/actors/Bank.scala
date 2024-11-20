@@ -27,9 +27,12 @@ class Bank {
   // command handler aka message handler                // run my little function here...
   def commandHandler(context: ActorContext[Command]): (State, Command) => Effect[Event, State] = (state, command) =>
     command match {
-      case CreateBankAccount(user, currency, initialBalance, replyTo) =>
+      case createCommand @ CreateBankAccount(_, _, _, _) =>
         val id = UUID.randomUUID().toString
         val newBankAccount = context.spawn(PersistentBankAccount(id), id)
+        Effect
+          .persist(BankAccountCreated(id))
+        .thenReply(newBankAccount)(_ => createCommand)
     }
 
   // event handler
