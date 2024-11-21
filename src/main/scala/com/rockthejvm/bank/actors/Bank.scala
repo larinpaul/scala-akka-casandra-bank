@@ -5,7 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.Effect
-import com.rockthejvm.bank.actors.PersistentBankAccount.{BankAccount, eventHandler}
+import com.rockthejvm.bank.actors.PersistentBankAccount.{BankAccount, BankAccountBalanceUpdatedResponse, eventHandler}
 
 import java.util.UUID
 
@@ -33,6 +33,13 @@ class Bank {
         Effect
           .persist(BankAccountCreated(id))
         .thenReply(newBankAccount)(_ => createCommand)
+      case updateCmd @ UpdateBalance(id, currency, amount, replyTo) =>
+        state.accounts.get(id) match {
+          case Some(account) =>
+            Effect.reply(account)(updateCmd)
+          case None =>
+            Effect.reply(replyTo)(BankAccountBalanceUpdatedResponse(None)) // failed
+        }
     }
 
   // event handler
