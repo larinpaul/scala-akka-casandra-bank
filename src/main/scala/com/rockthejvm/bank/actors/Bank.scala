@@ -5,7 +5,6 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.Effect
-import com.rockthejvm.bank.actors.PersistentBankAccount.{BankAccount, BankAccountBalanceUpdatedResponse, eventHandler}
 
 import java.util.UUID
 
