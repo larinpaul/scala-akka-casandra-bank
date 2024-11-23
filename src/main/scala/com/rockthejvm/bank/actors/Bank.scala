@@ -13,7 +13,9 @@ class Bank {
   // commands = messages
 
   import PersistentBankAccount.Command._
+  import PersistentBankAccount.Response._
   import PersistentBankAccount.Command
+
 
   // events
   sealed trait Event

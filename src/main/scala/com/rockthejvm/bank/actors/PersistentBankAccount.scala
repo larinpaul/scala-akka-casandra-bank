@@ -37,6 +37,7 @@ object PersistentBankAccount {
   }
 
   import Command._
+  import Response._
 
   // event sourcing
   // allows to hold not just the recent events, but all the vents
