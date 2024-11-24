@@ -34,13 +34,20 @@ class Bank {
         Effect
           .persist(BankAccountCreated(id))
         .thenReply(newBankAccount)(_ => createCommand)
-      case updateCmd @ UpdateBalance(id, currency, amount, replyTo) =>
+      case updateCmd @ UpdateBalance(id, _, _, replyTo) =>
         state.accounts.get(id) match {
           case Some(account) =>
             Effect.reply(account)(updateCmd)
           case None =>
-            Effect.reply(replyTo)(BankAccountBalanceUpdatedResponse(None)) // failed
+            Effect.reply(replyTo)(BankAccountBalanceUpdatedResponse(None)) // failed account search
         }
+      case getCmd @ GetBankAccount(id, replyTo) =>
+          state.accounts.get(id) match {
+            case Some(account) =>
+              Effect.reply(account)(getCmd)
+            case None =>
+              Effect.reply(replyTo)(GetBankAccountResponse(None)) // failed response
+          }
     }
 
   // event handler
