@@ -51,7 +51,7 @@ class Bank {
     }
 
   // event handler
-  val eventHandler: (State, Event) => State = (state, event) =>
+  def eventHandler: (context: ActorContext[Command]): State, Event) => State = (state, event) =>
     event match {
 
     }
@@ -62,7 +62,7 @@ class Bank {
       persistenceId = PersistenceId.ofUniqueId("bank"),
       emptyState = State(Map()),
       commandHandler = commandHandler(context),
-      eventHandler = eventHandler
+      eventHandler = eventHandler(context)
     )
   }
 
