@@ -51,7 +51,10 @@ class Bank {
     }
 
   // event handler
-  val eventHandler: (State, Event) => State = ???
+  val eventHandler: (State, Event) => State = (state, event) =>
+    event match {
+
+    }
 
   // behavior
   def apply(): Behavior[Command] = Behaviors.setup { context =>
