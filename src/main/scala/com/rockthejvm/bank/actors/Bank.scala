@@ -53,7 +53,8 @@ class Bank {
   // event handler
   def eventHandler: (context: ActorContext[Command]): State, Event) => State = (state, event) =>
     event match {
-
+      case BankAccountCreated(id) =>
+        val account = context.child(id) // exists after command handler
     }
 
   // behavior
