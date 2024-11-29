@@ -56,6 +56,8 @@ class Bank {
       case BankAccountCreated(id) =>
         val account = context.child(id) // exists after command handler
           .getOrElse(context.spawn(PersistentBankAccount(id), id)) // does NOT exist in the recovery mode, so needs to be created
+          .asInstanceOf[ActorRef[Command]]
+        state.copy(state.accounts + (id -> account))
     }
 
   // behavior
