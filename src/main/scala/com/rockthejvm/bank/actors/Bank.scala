@@ -1,12 +1,15 @@
 package com.rockthejvm.bank.actors
 
+import akka.NotUsed
 import akka.actor.AbstractActor.ActorContext
-import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.persistence.typed.PersistenceId
-import akka.persistence.typed.scaladsl.Effect
+import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
+import akka.util.Timeout
 
 import java.util.UUID
+import scala.concurrent.duration._
 
 class Bank {
 
