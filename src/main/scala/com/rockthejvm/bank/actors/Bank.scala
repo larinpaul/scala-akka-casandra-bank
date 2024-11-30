@@ -69,5 +69,16 @@ class Bank {
       eventHandler = eventHandler(context)
     )
   }
-
 }
+
+object BankPlayground {
+  def main(args: Array[String]): Unit = {
+    val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
+      val bank = context.spawn(Bank(), "bank")
+
+
+      Behaviors.empty
+    }
+  }
+}
+
