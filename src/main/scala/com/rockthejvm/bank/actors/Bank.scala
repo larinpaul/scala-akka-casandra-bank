@@ -100,6 +100,8 @@ object BankPlayground {
 
       Behaviors.empty
     }
+
+    val system = ActorSystem(rootBehavor, "BankDemo")
   }
 }
 
