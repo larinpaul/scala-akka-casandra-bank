@@ -9,7 +9,6 @@ import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import akka.util.Timeout
 
 import java.util.UUID
-import scala.concurrent.duration._
 
 class Bank {
 
@@ -75,10 +74,19 @@ class Bank {
 }
 
 object BankPlayground {
+  import PersistentBankAccount.Command._
+
   def main(args: Array[String]): Unit = {
     val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
       val bank = context.spawn(Bank(), "bank")
 
+      // ask pattern
+      import akka.actor.typed.scaladsl.AskPattern._
+      import scala.concurrent.duration._
+      implicit val timeout: Timeout = Timeout(2.seconds)
+      implicit val scheduler: Scheduler = context.system.scheduler
+
+      bank.ask(replyTo => CreateBankAccount("daniel", "USD", 10, replyTo)) // this is a future of a response
 
       Behaviors.empty
     }
