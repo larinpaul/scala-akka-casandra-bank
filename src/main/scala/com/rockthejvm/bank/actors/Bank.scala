@@ -75,6 +75,7 @@ class Bank {
 
 object BankPlayground {
   import PersistentBankAccount.Command._
+  import PersistentBankAccount.Response._
 
   def main(args: Array[String]): Unit = {
     val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
@@ -86,7 +87,14 @@ object BankPlayground {
       implicit val timeout: Timeout = Timeout(2.seconds)
       implicit val scheduler: Scheduler = context.system.scheduler
 
-      bank.ask(replyTo => CreateBankAccount("daniel", "USD", 10, replyTo)) // this is a future of a response
+      bank.ask(replyTo => CreateBankAccount("daniel", "USD", 10, replyTo)).flatMap {  // this is a future of a response
+        case BankAccountCreatedResponse(id) =>
+          context.log.info(s"successfully created bank account $id")
+          bank.ask(replyTo => GetBankAccount(id, replyTo))
+      }.foreach {
+        case GetBankAccountResponse(maybeBankAccount) =>
+          context.log.info(s"Account details: $maybeBankAccount")
+      }
 
       Behaviors.empty
     }
