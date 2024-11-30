@@ -9,6 +9,7 @@ import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import akka.util.Timeout
 
 import java.util.UUID
+import scala.concurrent.ExecutionContext
 
 class Bank {
 
@@ -86,6 +87,7 @@ object BankPlayground {
       import scala.concurrent.duration._
       implicit val timeout: Timeout = Timeout(2.seconds)
       implicit val scheduler: Scheduler = context.system.scheduler
+      implicit val ec: ExecutionContext = context.executionContext
 
       bank.ask(replyTo => CreateBankAccount("daniel", "USD", 10, replyTo)).flatMap {  // this is a future of a response
         case BankAccountCreatedResponse(id) =>
