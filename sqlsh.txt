@@ -1,0 +1,4 @@
+-- here we will have some sql requests
+
+cqls> select * from akka.messages; -- where all the messages are stored
+
