@@ -2,3 +2,6 @@
 
 cqls> select * from akka.messages; -- where all the events are stored
 
+drop table akka.messages; -- wrong, not this...
+
+truncate akka.messages; -- yeah, this one
