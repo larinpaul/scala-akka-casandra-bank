@@ -77,11 +77,13 @@ class Bank {
 object BankPlayground {
   import PersistentBankAccount.Command._
   import PersistentBankAccount.Response._
+  import PersistentBankAccount.Response
 
   def main(args: Array[String]): Unit = {
     val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
       val bank = context.spawn(Bank(), "bank")
 
+      val responseHandler = context.spawn(Behaviors.receiveMessage[Response())
       // ask pattern
       import akka.actor.typed.scaladsl.AskPattern._
       import scala.concurrent.duration._
