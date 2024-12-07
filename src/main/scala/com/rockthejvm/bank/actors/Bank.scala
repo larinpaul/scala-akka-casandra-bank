@@ -3,10 +3,11 @@ package com.rockthejvm.bank.actors
 import akka.NotUsed
 import akka.actor.AbstractActor.ActorContext
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
-import akka.actor.typed.{ActorRef, Behavior}
+import akka.actor.typed.{ActorRef, Behavior, Scheduler}
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import akka.util.Timeout
+import cats.implicits.catsSyntaxOptionId
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext
@@ -83,7 +84,14 @@ object BankPlayground {
     val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
       val bank = context.spawn(Bank(), "bank")
 
-      val responseHandler = context.spawn(Behaviors.receiveMessage[Response())
+      val responseHandler = context.spawn(Behaviors.receiveMessage[Response]{
+        case BankAccountCreatedResponse(id) =>
+          context.log.info(s"successfully created bank account $id")
+          Behaviors.same
+        case GetBankAccountResponse(maybeBankAccount) =>
+          context.log.info(s"Account details: $maybeBankAccount")
+          Behaviors.some
+      }, "replyHandler")
       // ask pattern
       import akka.actor.typed.scaladsl.AskPattern._
       import scala.concurrent.duration._
