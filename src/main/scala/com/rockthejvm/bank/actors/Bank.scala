@@ -90,7 +90,7 @@ object BankPlayground {
           Behaviors.same
         case GetBankAccountResponse(maybeBankAccount) =>
           context.log.info(s"Account details: $maybeBankAccount")
-          Behaviors.some
+          Behaviors.same
       }, "replyHandler")
       // ask pattern
       import akka.actor.typed.scaladsl.AskPattern._
