@@ -3,7 +3,7 @@ package com.rockthejvm.bank.actors
 import akka.NotUsed
 import akka.actor.AbstractActor.ActorContext
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
-import akka.actor.typed.{ActorRef, Behavior, Scheduler}
+import akka.actor.typed.{ActorRef, ActorSystem, Behavior, Scheduler}
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.scaladsl.{Effect, EventSourcedBehavior}
 import akka.util.Timeout
@@ -99,14 +99,8 @@ object BankPlayground {
       implicit val scheduler: Scheduler = context.system.scheduler
       implicit val ec: ExecutionContext = context.executionContext
 
-      bank.ask(replyTo => CreateBankAccount("daniel", "USD", 10, replyTo)).flatMap {  // this is a future of a response
-        case BankAccountCreatedResponse(id) =>
-          context.log.info(s"successfully created bank account $id")
-          bank.ask(replyTo => GetBankAccount(id, replyTo))
-      }.foreach {
-        case GetBankAccountResponse(maybeBankAccount) =>
-          context.log.info(s"Account details: $maybeBankAccount")
-      }
+      bank ! CreateBankAccount("daniel", "USD", 10, responseHandler)
+      // bank ! GetBankAccount(id, replyTo)
 
       Behaviors.empty
     }
