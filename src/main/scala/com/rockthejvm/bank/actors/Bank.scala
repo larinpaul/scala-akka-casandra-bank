@@ -83,15 +83,17 @@ object BankPlayground {
   def main(args: Array[String]): Unit = {
     val rootBehavor: Behavior[NotUsed] = Behaviors.setup { context =>
       val bank = context.spawn(Bank(), "bank")
+      val logger = context.log
 
       val responseHandler = context.spawn(Behaviors.receiveMessage[Response]{
         case BankAccountCreatedResponse(id) =>
-          context.log.info(s"successfully created bank account $id")
+          logger.info(s"successfully created bank account $id")
           Behaviors.same
         case GetBankAccountResponse(maybeBankAccount) =>
-          context.log.info(s"Account details: $maybeBankAccount")
+          logger.info(s"Account details: $maybeBankAccount")
           Behaviors.same
       }, "replyHandler")
+
       // ask pattern
       import akka.actor.typed.scaladsl.AskPattern._
       import scala.concurrent.duration._
