@@ -101,8 +101,8 @@ object BankPlayground {
       implicit val scheduler: Scheduler = context.system.scheduler
       implicit val ec: ExecutionContext = context.executionContext
 
-      bank ! CreateBankAccount("daniel", "USD", 10, responseHandler)
-      // bank ! GetBankAccount(id, replyTo)
+//      bank ! CreateBankAccount("daniel", "USD", 10, responseHandler)
+       bank ! GetBankAccount("deda8465-ddc3-4988-a584-4019d55a3045", replyTo)
 
       Behaviors.empty
     }
