@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence-typed"     % akkaVersion,
   "com.datastax.oss"  %  "java-driver-core"           % "4.13.0",
   "com.typesafe.akka" %% "akka-persistence-cassandra" % "1.0.5",
+//  Circe is used for  JSON parsing
   "io.circe"          %% "circe-core"                 % circeVersion,
   "io.circe"          %% "circe-generic"              % circeVersion,
   "io.circe"          %% "circe-parser"               % circeVersion,
