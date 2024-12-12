@@ -5,6 +5,8 @@ import akka.actor.typed.ActorRef
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command._
 
+case class BankAccountCreationRequest(user: String, balance: Double)
+
 class BankRoutes(bank: ActorRef[Command]) {
 
   /*
