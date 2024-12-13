@@ -17,6 +17,7 @@ class BankRoutes(bank: ActorRef[Command]) {
 
   def createBankAccount(request: BankAccountCreationRequest): Future[Response] = ???
 
+
   /*
     POST /bank
       Payload: bank account creation request as JSON
