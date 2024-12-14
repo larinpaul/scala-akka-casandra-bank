@@ -4,6 +4,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.actor.typed.ActorRef
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command
 import com.rockthejvm.bank.actors.PersistentBankAccount.Response
+import com.rockthejvm.bank.actors.PersistentBankAccount.Response._
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command._
 // Will allow me to use a special directive that will allow to convert a payload to a special case class
 import io.circe.generic.auto._
@@ -37,6 +38,9 @@ class BankRoutes(bank: ActorRef[Command]) {
             - expect a reply
             - send back an HTTP response (the first 3 will be abstracted away into other methods)
            */
+            onSuccess(createBankAccount(request)) {
+              case BankAccountCreatedResponse(id)
+            }
           }
         }
       }
