@@ -38,9 +38,9 @@ class BankRoutes(bank: ActorRef[Command]) {
             - convert the request into a Command for the bank actor
             - send the command to the bank
             - expect a reply
-            - send back an HTTP response (the first 3 will be abstracted away into other methods)
            */
             onSuccess(createBankAccount(request)) {
+              // - send back an HTTP response (the first 3 will be abstracted away into other methods)
               case BankAccountCreatedResponse(id) =>
                 respondWithHeader(Location(s"/bank/$id")) {
                   complete(StatusCodes.Created)
