@@ -2,6 +2,8 @@ package com.rockthejvm.bank.http
 
 import akka.http.scaladsl.server.Directives._
 import akka.actor.typed.ActorRef
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.headers.Location
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command
 import com.rockthejvm.bank.actors.PersistentBankAccount.Response
 import com.rockthejvm.bank.actors.PersistentBankAccount.Response._
@@ -39,7 +41,10 @@ class BankRoutes(bank: ActorRef[Command]) {
             - send back an HTTP response (the first 3 will be abstracted away into other methods)
            */
             onSuccess(createBankAccount(request)) {
-              case BankAccountCreatedResponse(id)
+              case BankAccountCreatedResponse(id) =>
+                respondWithHeader(Location(s"/bank/$id")) {
+                  complete(StatusCodes.Created)
+                }
             }
           }
         }
