@@ -11,6 +11,7 @@ import com.rockthejvm.bank.actors.PersistentBankAccount.Command._
 // Will allow me to use a special directive that will allow to convert a payload to a special case class
 import io.circe.generic.auto._
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
+import akka.actor.typed.scaladsl.AskPattern._
 
 import scala.concurrent.Future
 
