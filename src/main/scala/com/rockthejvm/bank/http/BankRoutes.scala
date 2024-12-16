@@ -21,7 +21,8 @@ case class BankAccountCreationRequest(user: String, balance: Double) { // conver
 
 class BankRoutes(bank: ActorRef[Command]) {
 
-  def createBankAccount(request: BankAccountCreationRequest): Future[Response] = ???
+  def createBankAccount(request: BankAccountCreationRequest): Future[Response] =
+    bank.ask(replyTo => request.toCommand(replyTo))
 
 
   /*
