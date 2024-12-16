@@ -4,6 +4,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.actor.typed.ActorRef
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.headers.Location
+import akka.util.Timeout
 import com.rockthejvm.bank.actors.PersistentBankAccount.Command
 import com.rockthejvm.bank.actors.PersistentBankAccount.Response
 import com.rockthejvm.bank.actors.PersistentBankAccount.Response._
@@ -14,12 +15,15 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import akka.actor.typed.scaladsl.AskPattern._
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
 case class BankAccountCreationRequest(user: String, balance: Double) { // converting a request into a command that an Akka actor can understand
   def toCommand(replyTo: ActorRef[Response]): Command = CreateBankAccount(user, currency, balance, replyTo)
 }
 
-class BankRoutes(bank: ActorRef[Command]) {
+class BankRoutes(bank: ActorRef[Command])(implicit system: ActorRef[_]) {
+
+  implicit val timeout: Timeout = Timeout()
 
   def createBankAccount(request: BankAccountCreationRequest): Future[Response] =
     bank.ask(replyTo => request.toCommand(replyTo))
