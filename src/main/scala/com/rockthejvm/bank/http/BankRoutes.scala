@@ -14,7 +14,9 @@ import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 
 import scala.concurrent.Future
 
-case class BankAccountCreationRequest(user: String, balance: Double)
+case class BankAccountCreationRequest(user: String, balance: Double) { // converting a request into a command that an Akka actor can understand
+  def toCommand(replyTo: ActorRef[Response]): Command = CreateBankAccount(user, currency, balance, replyTo)
+}
 
 class BankRoutes(bank: ActorRef[Command]) {
 
