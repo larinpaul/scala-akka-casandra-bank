@@ -17,6 +17,7 @@ import akka.actor.typed.scaladsl.AskPattern._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
+
 case class BankAccountCreationRequest(user: String, balance: Double) { // converting a request into a command that an Akka actor can understand
   def toCommand(replyTo: ActorRef[Response]): Command = CreateBankAccount(user, currency, balance, replyTo)
 }
