@@ -24,7 +24,7 @@ case class BankAccountCreationRequest(user: String, balance: Double) { // conver
 
 class BankRoutes(bank: ActorRef[Command])(implicit system: ActorRef[_]) {
 
-  implicit val timeout: Timeout = Timeout()
+  implicit val timeout: Timeout = Timeout(5.seconds)
 
   def createBankAccount(request: BankAccountCreationRequest): Future[Response] =
     bank.ask(replyTo => request.toCommand(replyTo))
