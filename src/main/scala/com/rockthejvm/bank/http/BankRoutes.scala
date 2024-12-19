@@ -36,6 +36,11 @@ class BankRoutes(bank: ActorRef[Command])(implicit system: ActorRef[_]) {
       Response:
       201 Created
       Location: /bank/uuid
+
+    GET /bank/uuid
+      Rsponse:
+        200 OK
+        JSON repr of bank account details
   */
   val routes =
     pathPrefix("bank") {
